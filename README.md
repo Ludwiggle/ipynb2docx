@@ -23,4 +23,4 @@ It converts the notebook to html with `jupyter-nbconvert`, then LaTeX math and e
 
 ## Possible issues
 
-The css+Jupyter header in the html temporary html file is considered to end at the first html heading <h1>. If the temporary html starts with <h2> of <h3> and so on, the LaTeX expressions are not recognized.. fix in progress
+The css+Jupyter header in the html temporary html file is considered to end at the first html heading `<h1>`. If the temporary html starts with `<h2>` of `<h3>` and so on, the LaTeX expressions are not recognized.. fix in progress
