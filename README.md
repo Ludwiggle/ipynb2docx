@@ -15,6 +15,12 @@ The motivation of this project has been the absence of a direct converter that p
 
 `$ ipynb2docx <notebook.ipynb>`
 
+
 ### How it works
 
 It converts the notebook to html with `jupyter-nbconvert`, then LaTeX math and equations are converted to png and embedded in the html. Finally `pandoc` converts the html to docx.
+
+
+## Possible issues
+
+The css+Jupyter header in the html temporary html file is considered to end at the first html heading <h1>. If the temporary html starts with <h2> of <h3> and so on, the LaTeX expressions are not recognized.. fix in progress
