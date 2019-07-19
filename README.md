@@ -11,4 +11,4 @@ Convert Juyter Notebooks to docx preserving LaTeX math and equations.
 
 ## Usage
 
-`$ ipybn2docx <notebook.ipynb>`
+`$ ipynb2docx <notebook.ipynb>`
