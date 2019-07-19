@@ -1,6 +1,7 @@
 # ipynb2docx
 
-Convert Juyter Notebooks to docx preserving LaTeX formatting. 
+Convert Juyter Notebooks to docx preserving LaTeX math and overall formatting.
+The motivation of this project has been the absence of a direct converter that produces an accurate formatting when a jupyter notebook contains in a mixture of markdown, html and LaTeX.
 
 ## Requirements
 
@@ -16,4 +17,4 @@ Convert Juyter Notebooks to docx preserving LaTeX formatting.
 
 ### How it works
 
-It converts the notebook to html with `jupyter-nbconvert`, then LaTeX math and equations are converted to png and embedded in the html as, and finally `pandoc` converts the html to docx.
+It converts the notebook to html with `jupyter-nbconvert`, then LaTeX math and equations are converted to png and embedded in the html. Finally `pandoc` converts the html to docx.
