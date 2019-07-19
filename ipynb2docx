@@ -1,0 +1,66 @@
+#!/bin/bash
+
+
+mkdir .tmp_ipynb2docx
+cp $1 .tmp_ipynb2docx/in.ipynb
+wait
+jupyter-nbconvert --no-input .tmp_ipynb2docx/in.ipynb
+
+wolframscript -c '
+
+fullin = ".tmp_ipynb2docx/in.html"~Import~"Text"
+
+eqs = fullin~StringCases~("<h1"~~__)~
+      StringDelete~Shortest["<code>"~~__~~"</code>"]~
+      StringCases~Shortest["$"~~__~~"$"] // Flatten 
+
+flns = StringPadLeft[#, Ceiling@Log[10,1+Length@eqs], "0"]& /@ 
+       ToString /@ Range@Length@ eqs //
+       ".tmp_ipynb2docx/"<>#& /@ #&
+
+"tex2svg \" "<>StringDelete[#1,"$"]<>"\" > "<>#2<>".svg" &~
+MapThread~{eqs,flns} //
+{Echo@#,Run@#}& /@ #&
+
+
+"rsvg-convert "<>#<>".svg -o "<>#<>".png" &/@ flns //
+#~StringRiffle~";" & //
+Export[".tmp_ipynb2docx/svgs.txt", #, "Text"]&
+'
+
+
+wait 
+cat  .tmp_ipynb2docx/svgs.txt
+bash .tmp_ipynb2docx/svgs.txt
+wait
+
+
+wolframscript -c '
+
+fullin = ".tmp_ipynb2docx/in.html"~Import~"Text"
+
+eqs = fullin~StringCases~("<h1"~~__)~
+      StringDelete~Shortest["<code>"~~__~~"</code>"]~
+      StringCases~Shortest["$"~~__~~"$"] // Flatten
+
+flns = StringPadLeft[#, Ceiling@Log[10,1+Length@eqs], "0"]& /@
+       ToString /@ Range@Length@ eqs //
+      ".tmp_ipynb2docx/"<>#<>".png" & /@ #&
+
+
+base64 = "<img src=\"data:image/png;base64,"<> 
+          ExportString[Import[#,"PNG"]~ExportString~"PNG","Base64"]<>"\">" & /@
+          flns
+
+
+StringReplace[fullin, #1:>#2 &~MapThread~
+  {eqs , base64 }
+] // Export[".tmp_ipynb2docx/in_full.html", #, "Text"]& 
+'
+
+wait 
+pandoc .tmp_ipynb2docx/in_full.html -o $1$'.docx'
+wait
+rm -r .tmp_ipynb2docx
+
+
